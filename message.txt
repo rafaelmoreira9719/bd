@@ -1,0 +1,75 @@
+create database pratica7;
+use pratica7;
+
+create table aluno (
+raAluno int primary key auto_increment,
+nome varchar(45),
+bairro varchar(45)
+);
+
+create table curso (
+idCurso int primary key auto_increment,
+nomeCurso varchar (45),
+coordenador varchar (45)
+);
+
+create table matricula (
+idMatricula int auto_increment,
+fkAluno int,
+foreign key (fkAluno) references aluno(raAluno),
+fkCurso int,
+foreign key (fkCurso) references curso(idCurso),
+media double,
+dtInicio date, 
+nivel varchar(45),
+primary key (idMatricula, fkAluno, fkCurso)
+);
+
+insert into aluno values 
+(null, 'Alexandre', 'Jardim'),
+(null, 'Raul', 'Grajau'),
+(null, 'Rafael', 'Paulista'),
+(null, 'Gustavo', 'Ceramica'),
+(null, 'Joao', 'Campestre');
+
+insert into curso values 
+(null, 'Ingles', 'Felipe'),
+(null, 'Espanhol', 'Casillas'),
+(null, 'Frances', 'Pierre');
+
+insert into matricula values 
+(null, 1, 1, 8.9, '2018-02-10','A1'),
+(null, 2, 1, 9.0, '2019-03-22','A2'),
+(null, 3, 1, 8.7, '2020-12-09','B3'),
+(null, 4, 2, 8.9, '2019-05-12','A1'),
+(null, 5, 2, 8.2, '2022-05-12','I2');
+
+select * from aluno;
+select * from curso;
+select * from matricula;
+
+select * from aluno join matricula on raAluno = fkAluno join curso on idCurso = fkCurso; 
+
+select aluno.raAluno, aluno.nome, aluno.bairro, curso.idCurso, curso.nomeCurso, curso.coordenador 
+from aluno join matricula on raAluno = fkAluno join curso on idCurso = fkCurso; 
+
+select * from aluno join matricula on raAluno = fkAluno join curso on idCurso = fkCurso where curso.nomeCurso = 'ingles'; 
+
+select * from aluno join matricula on raAluno = fkAluno join curso on idCurso = fkCurso where aluno.nome = 'Alexandre'; 
+
+select avg(media) from matricula;
+select sum(media) from matricula;
+
+select min(media) from matricula;
+select max(media) from matricula;
+
+-- soma das notas agrupados por alunos
+select nome, max(media) from aluno join matricula on raAluno = fkAluno GROUP BY nome;
+select nome, min(media) from aluno join matricula on raAluno = fkAluno GROUP BY nome;
+
+select nomecurso, max(media) from curso join matricula on idCurso = fkCurso group by nomecurso;
+select nomecurso, min(media) from curso join matricula on idCurso = fkCurso group by nomecurso;
+
+select media from matricula;
+
+select count(media) as 'quantidade de medias' from matricula;
